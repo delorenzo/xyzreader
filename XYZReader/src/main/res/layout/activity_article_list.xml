@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/scrollbar_max_height"
         android:background="@color/theme_primary"
-        android:elevation="8dp">
+        android:elevation="@dimen/design_appbar_elevation">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"

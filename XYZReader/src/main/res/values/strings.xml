@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/tools">
 
     <string name="app_name">XYZ Reader</string>
     <string name="welcome_xyz_reader">Welcome to XYZ Reader!</string>
@@ -7,6 +7,17 @@
     <string name="action_settings">Settings</string>
     <string name="action_share">Share</string>
 
-    <string name="up">Up</string>
+    <string name="up">Up</string>\
 
+    <string name="article_image_content_description">Article image</string>
+
+    <string name="subtitle_format">
+        <xliff:g name="date" example="June 29 2013">%1$s</xliff:g>
+         by
+        <xliff:g name="author" example="Ben Jones" translatable="false">%1%s</xliff:g>
+    </string>
+
+    <string name="byline_format">
+        <xliff:g name="date" example="June 29 2013">%1$s</xliff:g> by
+    </string>
 </resources>

@@ -12,4 +12,7 @@
     <!-- scrollbar -->
     <dimen name="scrollbar_max_height">112dp</dimen>
     <dimen name="scrollbar_collapsed_height">56dp</dimen>
+    <dimen name="scrollbar_detail_max_height">200dp</dimen>
+
+    <dimen name="list_item_size">200dp</dimen>
 </resources>
