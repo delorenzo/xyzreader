@@ -8,7 +8,7 @@
         android:id="@+id/toolbar_container"
         android:layout_width="match_parent"
         android:layout_height="@dimen/scrollbar_max_height"
-        android:background="@color/theme_primary"
+        android:background="?colorPrimary"
         android:elevation="@dimen/design_appbar_elevation">
 
         <android.support.design.widget.CollapsingToolbarLayout
@@ -22,7 +22,6 @@
                 android:layout_marginRight="@dimen/list_toolbar_side_margin"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/scrollbar_collapsed_height"
-                layout_collapseMode="pin"
                 android:layout_gravity="bottom">
 
                 <ImageView
@@ -39,7 +38,7 @@
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:background="@color/material_grey_300"
+        android:background="@color/text_color_dividers_dark"
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
@@ -53,6 +52,7 @@
             android:paddingRight="@dimen/abc_list_item_padding_horizontal_material"
             android:paddingStart="@dimen/abc_list_item_padding_horizontal_material"
             android:paddingEnd="@dimen/abc_list_item_padding_horizontal_material"
-            android:paddingBottom="@dimen/abc_dialog_list_padding_vertical_material" />
+            android:paddingBottom="@dimen/abc_dialog_list_padding_vertical_material"
+            />
     </android.support.v4.widget.SwipeRefreshLayout>
 </android.support.design.widget.CoordinatorLayout>

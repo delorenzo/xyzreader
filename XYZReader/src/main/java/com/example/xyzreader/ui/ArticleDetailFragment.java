@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -131,10 +132,6 @@ public class ArticleDetailFragment extends Fragment implements
         if (bylineView != null) {
             bylineView.setMovementMethod(new LinkMovementMethod());
         }
-        if (bodyView != null) {
-            bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
-        }
-
         if (mCursor != null) {
             mRootView.setAlpha(0);
             mRootView.setVisibility(View.VISIBLE);
@@ -143,13 +140,13 @@ public class ArticleDetailFragment extends Fragment implements
             collapsingToolbarLayout.setTitle(articleTitle);
             bylineView.setText(
                     String.format(
-                        getString(R.string.byline_format),
-                        DateUtils.getRelativeTimeSpanString(
-                                mCursor.getLong(ArticleLoader.Query.PUBLISHED_DATE),
-                                System.currentTimeMillis(),
-                                DateUtils.HOUR_IN_MILLIS,
-                                DateUtils.FORMAT_ABBREV_ALL
-                        )
+                            getString(R.string.byline_format),
+                            DateUtils.getRelativeTimeSpanString(
+                                    mCursor.getLong(ArticleLoader.Query.PUBLISHED_DATE),
+                                    System.currentTimeMillis(),
+                                    DateUtils.HOUR_IN_MILLIS,
+                                    DateUtils.FORMAT_ABBREV_ALL
+                            )
                     )
             );
             authorView.setText(mCursor.getString(ArticleLoader.Query.AUTHOR));
