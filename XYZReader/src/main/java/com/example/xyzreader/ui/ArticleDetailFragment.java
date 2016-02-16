@@ -188,11 +188,4 @@ public class ArticleDetailFragment extends Fragment implements
         mCursor = null;
         bindViews();
     }
-
-    public int getUpButtonFloor() {
-        if (mPhotoView == null || mPhotoView.getHeight() == 0) {
-            return Integer.MAX_VALUE;
-        }
-        return 0;
-    }
 }

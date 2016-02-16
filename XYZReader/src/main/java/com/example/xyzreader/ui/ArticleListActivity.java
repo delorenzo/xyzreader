@@ -8,6 +8,8 @@ import android.content.IntentFilter;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +31,9 @@ import com.example.xyzreader.data.ItemsContract;
 import com.example.xyzreader.data.UpdaterService;
 import com.squareup.picasso.Picasso;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * An activity representing a list of Articles. This activity has different presentations for
  * handset and tablet-size devices. On handsets, the activity presents a list of items, which when
@@ -36,30 +41,36 @@ import com.squareup.picasso.Picasso;
  * activity presents a grid of items as cards.
  */
 public class ArticleListActivity extends AppCompatActivity implements
-        LoaderManager.LoaderCallbacks<Cursor> {
-
-    private Toolbar mToolbar;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RecyclerView mRecyclerView;
+        LoaderManager.LoaderCallbacks<Cursor>, ArticleAdapter.ItemClickListener {
+    @Bind(R.id.toolbar) Toolbar mToolbar;
+    @Bind(R.id.recycler_view) RecyclerView mRecyclerView;
+    @Bind(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
+    @Bind(R.id.toolbar_container) View toolbarContainerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_list);
-
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-
-
-        final View toolbarContainerView = findViewById(R.id.toolbar_container);
-
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        ButterKnife.bind(this);
         getLoaderManager().initLoader(0, null, this);
-
         if (savedInstanceState == null) {
             refresh();
         }
+    }
+
+    @Override
+    public void onClick(View view, long itemId) {
+        Intent intent = new Intent(
+                Intent.ACTION_VIEW,
+                ItemsContract.Items.buildItemUri(itemId));
+        ArticleAdapter.ViewHolder viewHolder =
+                (ArticleAdapter.ViewHolder) mRecyclerView.findViewHolderForItemId(itemId);
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                this,
+                viewHolder.thumbnailView,
+                getString(R.string.article_image_transition_name)
+        );
+        ActivityCompat.startActivity(this, intent, options.toBundle());
     }
 
     private void refresh() {
@@ -104,9 +115,8 @@ public class ArticleListActivity extends AppCompatActivity implements
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
 //        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 //        mRecyclerView.setLayoutManager(layoutManager);
-        Adapter adapter = new Adapter(cursor);
-        adapter.setHasStableIds(true);
-        mRecyclerView.setAdapter(adapter);
+        final ArticleAdapter articleAdapter = new ArticleAdapter(cursor, this, this);
+        mRecyclerView.setAdapter(articleAdapter);
         int columnCount = getResources().getInteger(R.integer.list_column_count);
         StaggeredGridLayoutManager sglm =
                 new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
@@ -118,68 +128,4 @@ public class ArticleListActivity extends AppCompatActivity implements
         mRecyclerView.setAdapter(null);
     }
 
-    private class Adapter extends RecyclerView.Adapter<ViewHolder> {
-        private Cursor mCursor;
-
-        public Adapter(Cursor cursor) {
-            mCursor = cursor;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            mCursor.moveToPosition(position);
-            return mCursor.getLong(ArticleLoader.Query._ID);
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = getLayoutInflater().inflate(R.layout.list_item_article, parent, false);
-            final ViewHolder vh = new ViewHolder(view);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivity(new Intent(Intent.ACTION_VIEW,
-                            ItemsContract.Items.buildItemUri(getItemId(vh.getAdapterPosition()))));
-                }
-            });
-            return vh;
-        }
-
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            mCursor.moveToPosition(position);
-            holder.titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
-            holder.subtitleView.setText(String.format(
-                            getString(R.string.subtitle_format),
-                            DateUtils.getRelativeTimeSpanString(
-                                    mCursor.getLong(ArticleLoader.Query.PUBLISHED_DATE),
-                                    System.currentTimeMillis(),
-                                    DateUtils.HOUR_IN_MILLIS,
-                                    DateUtils.FORMAT_ABBREV_ALL),
-                            mCursor.getString(ArticleLoader.Query.AUTHOR)
-                    )
-            );
-            Picasso.with(getApplicationContext())
-                    .load(mCursor.getString(ArticleLoader.Query.THUMB_URL))
-                    .into(holder.thumbnailView);
-        }
-
-        @Override
-        public int getItemCount() {
-            return mCursor.getCount();
-        }
-    }
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView thumbnailView;
-        public TextView titleView;
-        public TextView subtitleView;
-
-        public ViewHolder(View view) {
-            super(view);
-            thumbnailView = (ImageView) view.findViewById(R.id.thumbnail);
-            titleView = (TextView) view.findViewById(R.id.article_title);
-            subtitleView = (TextView) view.findViewById(R.id.article_subtitle);
-        }
-    }
 }

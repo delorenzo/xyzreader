@@ -25,6 +25,7 @@
 
             <!-- background image -->
             <ImageView
+                android:transitionName="@string/article_image_transition_name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
@@ -100,6 +101,7 @@
             </FrameLayout>
     </android.support.v4.widget.NestedScrollView>
 
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/share_fab"
         android:background="?colorAccent"
@@ -113,5 +115,4 @@
         android:src="@drawable/ic_share"
         android:elevation="@dimen/fab_elevation"
         android:contentDescription="@string/action_share" />
-
 </android.support.design.widget.CoordinatorLayout>

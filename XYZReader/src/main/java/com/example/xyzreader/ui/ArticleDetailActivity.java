@@ -137,15 +137,7 @@ public class ArticleDetailActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent upIntent = NavUtils.getParentActivityIntent(this);
-                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-                    TaskStackBuilder.create(this)
-                            .addNextIntentWithParentStack(upIntent)
-                            .startActivities();
-                }
-                else {
-                    NavUtils.navigateUpTo(this, upIntent);
-                }
+                supportFinishAfterTransition();
                 return true;
         }
         return super.onOptionsItemSelected(item);

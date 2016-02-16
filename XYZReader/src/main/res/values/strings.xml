@@ -14,10 +14,12 @@
     <string name="subtitle_format">
         <xliff:g name="date" example="June 29 2013">%1$s</xliff:g>
          by
-        <xliff:g name="author" example="Ben Jones" translatable="false">%1%s</xliff:g>
+        <xliff:g name="author" example="Ben Jones" translatable="false">%2$s</xliff:g>
     </string>
 
     <string name="byline_format">
         <xliff:g name="date" example="June 29 2013">%1$s</xliff:g> by
     </string>
+
+    <string name="article_image_transition_name" translatable="false">articleImage</string>
 </resources>
