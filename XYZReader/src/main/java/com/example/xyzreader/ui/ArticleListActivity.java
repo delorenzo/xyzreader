@@ -113,8 +113,6 @@ public class ArticleListActivity extends AppCompatActivity implements
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-//        mRecyclerView.setLayoutManager(layoutManager);
         final ArticleAdapter articleAdapter = new ArticleAdapter(cursor, this, this);
         mRecyclerView.setAdapter(articleAdapter);
         int columnCount = getResources().getInteger(R.integer.list_column_count);

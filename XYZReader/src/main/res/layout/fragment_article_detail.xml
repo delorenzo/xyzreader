@@ -8,23 +8,29 @@
     android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/scrollbar_detail_max_height"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
         android:background="?colorPrimary"
         android:elevation="@dimen/design_appbar_elevation">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="@dimen/scrollbar_detail_max_height"
             app:contentScrim="?colorPrimary"
             app:collapsedTitleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"
             app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            android:fitsSystemWindows="true"
+            app:expandedTitleMarginStart="48dp"
+            app:expandedTitleMarginEnd="64dp"
             app:expandedTitleGravity="center">
 
             <!-- background image -->
             <ImageView
+                android:fitsSystemWindows="true"
                 android:transitionName="@string/article_image_transition_name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -35,6 +41,7 @@
 
             <!-- byline -->
             <LinearLayout
+                android:fitsSystemWindows="true"
                 android:layout_gravity="center_horizontal|bottom"
                 android:orientation="horizontal"
                 android:id="@+id/meta_bar"
@@ -63,9 +70,10 @@
             </LinearLayout>
 
             <android.support.v7.widget.Toolbar
+                android:fitsSystemWindows="true"
                 android:id="@+id/toolbar"
                 app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                android:layout_height="?actionBarSize"
+                android:layout_height="?attr/actionBarSize"
                 android:layout_width="match_parent"
                 app:layout_collapseMode="pin">
 
@@ -105,7 +113,8 @@
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/share_fab"
         android:background="?colorAccent"
-        android:layout_gravity="bottom|end"
+        app:layout_anchor="@id/app_bar_layout"
+        app:layout_anchorGravity="bottom|right|end"
         android:layout_marginRight="@dimen/fab_margin"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="@dimen/fab_margin"
