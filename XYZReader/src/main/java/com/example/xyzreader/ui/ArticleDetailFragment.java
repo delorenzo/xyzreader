@@ -6,19 +6,13 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
@@ -27,17 +21,13 @@ import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 import com.squareup.picasso.Callback;
@@ -65,7 +55,8 @@ public class ArticleDetailFragment extends Fragment implements
     @Bind(R.id.article_author) TextView authorView;
     @Bind(R.id.article_body) TextView bodyView;
     @Bind(R.id.collapsing_toolbar_layout) CollapsingToolbarLayout collapsingToolbarLayout;
-    @Bind(R.id.toolbar) Toolbar mToolbar;
+    @Bind(R.id.toolbar) Toolbar toolbar;
+    @Bind(R.id.share_fab) FloatingActionButton floatingActionButton;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -110,9 +101,9 @@ public class ArticleDetailFragment extends Fragment implements
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
         ButterKnife.bind(this, mRootView);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
-        activity.setSupportActionBar(mToolbar);
+        activity.setSupportActionBar(toolbar);
         activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
@@ -189,9 +180,13 @@ public class ArticleDetailFragment extends Fragment implements
     }
 
     private void applyPalette(Palette palette) {
-        int darkPaletteColor = palette.getDarkMutedColor(ContextCompat.getColor(getActivity(), R.color.theme_primary_dark));
-        collapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(ContextCompat.getColor(getActivity(), R.color.theme_primary)));
-        collapsingToolbarLayout.setStatusBarScrimColor(palette.getDarkMutedColor(ContextCompat.getColor(getActivity(), R.color.theme_primary_dark)));
+        int darkPaletteColor = palette.getDarkMutedColor(
+                ContextCompat.getColor(getActivity(), R.color.theme_primary_dark));
+        collapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(
+                ContextCompat.getColor(getActivity(), R.color.theme_primary)));
+        collapsingToolbarLayout.setStatusBarScrimColor(darkPaletteColor);
+        floatingActionButton.setBackgroundColor(palette.getLightVibrantColor(
+                ContextCompat.getColor(getActivity(), R.color.theme_accent)));
         if (Build.VERSION.SDK_INT >= 21) {
             Window window = getActivity().getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);

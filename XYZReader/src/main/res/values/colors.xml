@@ -35,4 +35,7 @@
     <color name="text_color_secondary_dark">#8C000000</color>
     <color name="text_color_disabled_dark">#59000000</color>
     <color name="text_color_dividers_dark">#1A000000</color>
+
+    <color name="item_selected_color">@color/theme_accent</color>
+    <color name="item_unselected_color">#FFFFFFFF</color>
 </resources>

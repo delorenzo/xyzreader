@@ -21,6 +21,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
@@ -60,6 +61,17 @@ public class ArticleListActivity extends AppCompatActivity implements
         mTwoPane = findViewById(R.id.article_container) != null;
         if (savedInstanceState == null) {
             refresh();
+        }
+    }
+
+    private void loadArticleContainer() {
+        if (mTwoPane) {
+            long itemId = mRecyclerView.getAdapter().getItemId(0);
+            ArticleDetailFragment fragment = ArticleDetailFragment.newInstance(itemId);
+            getFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.article_container, fragment)
+                    .commit();
         }
     }
 
@@ -134,14 +146,6 @@ public class ArticleListActivity extends AppCompatActivity implements
         StaggeredGridLayoutManager sglm =
                 new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(sglm);
-
-//        if (mTwoPane) {
-//            ArticleDetailFragment fragment = ArticleDetailFragment.newInstance(cursor.getLong(ArticleLoader.Query._ID));
-//            getFragmentManager()
-//                    .beginTransaction()
-//                    .add(R.id.article_container, fragment)
-//                    .commit();
-//        }
     }
 
     @Override
