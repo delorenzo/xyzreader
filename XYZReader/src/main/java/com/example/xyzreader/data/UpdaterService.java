@@ -12,8 +12,6 @@ import android.os.RemoteException;
 import android.text.format.Time;
 import android.util.Log;
 
-import com.example.xyzreader.remote.RemoteEndpointUtil;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,7 +53,7 @@ public class UpdaterService extends IntentService {
         cpo.add(ContentProviderOperation.newDelete(dirUri).build());
 
         try {
-            JSONArray array = RemoteEndpointUtil.fetchJsonArray();
+            JSONArray array = ItemsProvider.RemoteEndpointUtil.fetchJsonArray();
             if (array == null) {
                 throw new JSONException("Invalid parsed item array" );
             }

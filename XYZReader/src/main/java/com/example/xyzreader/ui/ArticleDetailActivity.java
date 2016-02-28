@@ -35,15 +35,17 @@ public class ArticleDetailActivity extends AppCompatActivity
     private long mSelectedItemId;
     @Bind(R.id.pager) ViewPager mPager;
     private MyPagerAdapter mPagerAdapter;
+    private int mSelectedItemUpButtonFloor = Integer.MAX_VALUE;
+    private int mTopInset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            getWindow().getDecorView().setSystemUiVisibility(
+//                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+//                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+//        }
         setContentView(R.layout.activity_article_detail);
         ButterKnife.bind(this);
         getLoaderManager().initLoader(0, null, this);
@@ -143,11 +145,15 @@ public class ArticleDetailActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Log.e("Article", "Current pager item:  " + mPager.getCurrentItem());
-                mPager.setCurrentItem(mPager.getCurrentItem() - 1);
-                supportFinishAfterTransition();
-                return true;
+                onSupportNavigateUp();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        Log.e("Article", "Current pager item:  " + mPager.getCurrentItem());
+        supportFinishAfterTransition();
+        return true;
     }
 }

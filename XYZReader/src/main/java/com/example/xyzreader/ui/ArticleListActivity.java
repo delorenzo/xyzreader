@@ -1,5 +1,6 @@
 package com.example.xyzreader.ui;
 
+import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,6 +9,8 @@ import android.content.IntentFilter;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -46,6 +49,7 @@ public class ArticleListActivity extends AppCompatActivity implements
     @Bind(R.id.recycler_view) RecyclerView mRecyclerView;
     @Bind(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
     @Bind(R.id.toolbar_container) View toolbarContainerView;
+    private Boolean mTwoPane = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,7 @@ public class ArticleListActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_article_list);
         ButterKnife.bind(this);
         getLoaderManager().initLoader(0, null, this);
+        mTwoPane = findViewById(R.id.article_container) != null;
         if (savedInstanceState == null) {
             refresh();
         }
@@ -60,17 +65,27 @@ public class ArticleListActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(View view, long itemId) {
-        Intent intent = new Intent(
-                Intent.ACTION_VIEW,
-                ItemsContract.Items.buildItemUri(itemId));
-        ArticleAdapter.ViewHolder viewHolder =
-                (ArticleAdapter.ViewHolder) mRecyclerView.findViewHolderForItemId(itemId);
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                this,
-                viewHolder.thumbnailView,
-                getString(R.string.article_image_transition_name)
-        );
-        ActivityCompat.startActivity(this, intent, options.toBundle());
+        if (mTwoPane) {
+            ArticleDetailFragment fragment = ArticleDetailFragment.newInstance(itemId);
+            getFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.article_container, fragment)
+                    .commit();
+        }
+
+        else {
+            Intent intent = new Intent(
+                    Intent.ACTION_VIEW,
+                    ItemsContract.Items.buildItemUri(itemId));
+            ArticleAdapter.ViewHolder viewHolder =
+                    (ArticleAdapter.ViewHolder) mRecyclerView.findViewHolderForItemId(itemId);
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    this,
+                    viewHolder.thumbnailView,
+                    getString(R.string.article_image_transition_name)
+            );
+            ActivityCompat.startActivity(this, intent, options.toBundle());
+        }
     }
 
     private void refresh() {
@@ -119,11 +134,18 @@ public class ArticleListActivity extends AppCompatActivity implements
         StaggeredGridLayoutManager sglm =
                 new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(sglm);
+
+//        if (mTwoPane) {
+//            ArticleDetailFragment fragment = ArticleDetailFragment.newInstance(cursor.getLong(ArticleLoader.Query._ID));
+//            getFragmentManager()
+//                    .beginTransaction()
+//                    .add(R.id.article_container, fragment)
+//                    .commit();
+//        }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mRecyclerView.setAdapter(null);
     }
-
 }

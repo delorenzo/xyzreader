@@ -19,6 +19,7 @@ import android.support.v4.app.ShareCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -26,12 +27,14 @@ import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
@@ -89,10 +92,6 @@ public class ArticleDetailFragment extends Fragment implements
         setHasOptionsMenu(true);
     }
 
-    public ArticleDetailActivity getActivityCast() {
-        return (ArticleDetailActivity) getActivity();
-    }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -103,18 +102,28 @@ public class ArticleDetailFragment extends Fragment implements
         getLoaderManager().initLoader(0, null, this);
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
         ButterKnife.bind(this, mRootView);
-        getActivityCast().setSupportActionBar(mToolbar);
-        ActionBar actionBar = getActivityCast().getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.setSupportActionBar(mToolbar);
+        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         bindViews();
         return mRootView;
+    }
+
+    private void onBackPressed() {
+        ((AppCompatActivity)getActivity()).onSupportNavigateUp();
     }
 
     @OnClick(R.id.share_fab)
@@ -164,6 +173,7 @@ public class ArticleDetailFragment extends Fragment implements
                     .into(mPhotoView, new Callback.EmptyCallback() {
                         @Override
                         public void onSuccess() {
+                            if (mPhotoView == null) return;
                             Bitmap bitmap = ((BitmapDrawable) mPhotoView.getDrawable()).getBitmap();
                             Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
                                 @Override

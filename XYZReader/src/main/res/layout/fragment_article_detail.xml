@@ -39,6 +39,13 @@
                 android:contentDescription="@string/article_image_content_description"
                 app:layout_collapseMode="parallax"/>
 
+            <!-- protective gradient -->
+            <View
+                android:fitsSystemWindows="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/gradient_bottom"/>
+
             <!-- byline -->
             <LinearLayout
                 android:fitsSystemWindows="true"
@@ -50,6 +57,7 @@
                 android:paddingBottom="8dp">
 
                 <TextView
+                    android:fitsSystemWindows="true"
                     tools:text="Jun 18, 2013 by"
                     android:id="@+id/article_byline"
                     style="?android:attr/textAppearanceMedium"
@@ -60,6 +68,7 @@
                     android:layout_marginEnd="4dp"/>
 
                 <TextView
+                    android:fitsSystemWindows="true"
                     tools:text="Author Name"
                     style="?android:attr/textAppearanceMedium"
                     android:id="@+id/article_author"
@@ -73,7 +82,7 @@
                 android:fitsSystemWindows="true"
                 android:id="@+id/toolbar"
                 app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="?actionBarSize"
                 android:layout_width="match_parent"
                 app:layout_collapseMode="pin">
 
