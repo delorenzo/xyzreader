@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/toolbar_container"
         android:layout_width="match_parent"
@@ -48,7 +49,7 @@
             android:layout_height="match_parent">
 
             <android.support.v7.widget.RecyclerView
-                android:background="@drawable/article_selector"
+                android:elevation="0dp"
                 android:choiceMode="singleChoice"
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
@@ -56,15 +57,18 @@
                 android:clipToPadding="false"
                 android:scrollbarStyle="outsideOverlay"
                 android:paddingTop="@dimen/abc_dialog_list_padding_vertical_material"
-                android:paddingLeft="@dimen/abc_list_item_padding_horizontal_material"
-                android:paddingRight="@dimen/abc_list_item_padding_horizontal_material"
-                android:paddingStart="@dimen/abc_list_item_padding_horizontal_material"
-                android:paddingEnd="@dimen/abc_list_item_padding_horizontal_material"
                 android:paddingBottom="@dimen/abc_dialog_list_padding_vertical_material"
                 />
         </android.support.v4.widget.SwipeRefreshLayout>
 
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:id="@+id/divider"
+            android:background="@android:color/darker_gray"/>
+
         <FrameLayout
+            android:elevation="2dp"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:id="@+id/article_container"

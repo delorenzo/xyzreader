@@ -49,7 +49,6 @@ public class ArticleListActivity extends AppCompatActivity implements
     @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.recycler_view) RecyclerView mRecyclerView;
     @Bind(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
-    @Bind(R.id.toolbar_container) View toolbarContainerView;
     private Boolean mTwoPane = false;
 
     @Override
