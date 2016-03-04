@@ -7,8 +7,7 @@
     android:layout_marginBottom="4dp"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?selectableItemBackgroundBorderless"
-    android:background="@drawable/touch_selector">
+    android:foreground="?selectableItemBackgroundBorderless">
 
     <RelativeLayout
         android:layout_width="match_parent"

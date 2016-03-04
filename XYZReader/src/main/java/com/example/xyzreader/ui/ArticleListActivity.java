@@ -66,7 +66,7 @@ public class ArticleListActivity extends AppCompatActivity implements
     private void loadArticleContainer() {
         if (mTwoPane) {
             long itemId = mRecyclerView.getAdapter().getItemId(0);
-            ArticleDetailFragment fragment = ArticleDetailFragment.newInstance(itemId);
+            ArticleDetailFragment fragment = ArticleDetailFragment.newInstance(itemId, true);
             getFragmentManager()
                     .beginTransaction()
                     .add(R.id.article_container, fragment)
@@ -77,7 +77,7 @@ public class ArticleListActivity extends AppCompatActivity implements
     @Override
     public void onClick(View view, long itemId) {
         if (mTwoPane) {
-            ArticleDetailFragment fragment = ArticleDetailFragment.newInstance(itemId);
+            ArticleDetailFragment fragment = ArticleDetailFragment.newInstance(itemId, true);
             getFragmentManager()
                     .beginTransaction()
                     .add(R.id.article_container, fragment)

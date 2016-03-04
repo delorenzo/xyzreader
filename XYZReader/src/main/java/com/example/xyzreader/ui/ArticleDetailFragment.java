@@ -46,9 +46,11 @@ public class ArticleDetailFragment extends Fragment implements
         LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = "ArticleDetailFragment";
     public static final String ARG_ITEM_ID = "item_id";
+    public static final String ARG_TWOPANE = "twopane";
     private Cursor mCursor;
     private long mItemId;
     private boolean mIsCard = false;
+    private boolean mIsTwoPane = false;
     private View mRootView;
     @Bind(R.id.photo) ImageView mPhotoView;
     @Bind(R.id.article_byline) TextView bylineView;
@@ -65,9 +67,10 @@ public class ArticleDetailFragment extends Fragment implements
     public ArticleDetailFragment() {
     }
 
-    public static ArticleDetailFragment newInstance(long itemId) {
+    public static ArticleDetailFragment newInstance(long itemId, Boolean twoPane) {
         Bundle arguments = new Bundle();
         arguments.putLong(ARG_ITEM_ID, itemId);
+        arguments.putBoolean(ARG_TWOPANE, twoPane);
         ArticleDetailFragment fragment = new ArticleDetailFragment();
         fragment.setArguments(arguments);
         return fragment;
@@ -78,6 +81,7 @@ public class ArticleDetailFragment extends Fragment implements
         super.onCreate(savedInstanceState);
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             mItemId = getArguments().getLong(ARG_ITEM_ID);
+            mIsTwoPane = getArguments().getBoolean(ARG_TWOPANE);
         }
         mIsCard = getResources().getBoolean(R.bool.detail_is_card);
         setHasOptionsMenu(true);
@@ -102,7 +106,9 @@ public class ArticleDetailFragment extends Fragment implements
         ButterKnife.bind(this, mRootView);
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setSupportActionBar(toolbar);
-        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (!mIsTwoPane) {
+            activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
