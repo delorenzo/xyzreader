@@ -127,7 +127,7 @@
         android:layout_marginRight="@dimen/fab_margin"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="@dimen/fab_margin"
-        app:fabSize="normal"
+        app:fabSize="@integer/fab_size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_share"

@@ -49,7 +49,6 @@ public class ArticleDetailFragment extends Fragment implements
     public static final String ARG_TWOPANE = "twopane";
     private Cursor mCursor;
     private long mItemId;
-    private boolean mIsCard = false;
     private boolean mIsTwoPane = false;
     private View mRootView;
     @Bind(R.id.photo) ImageView mPhotoView;
@@ -83,7 +82,6 @@ public class ArticleDetailFragment extends Fragment implements
             mItemId = getArguments().getLong(ARG_ITEM_ID);
             mIsTwoPane = getArguments().getBoolean(ARG_TWOPANE);
         }
-        mIsCard = getResources().getBoolean(R.bool.detail_is_card);
         setHasOptionsMenu(true);
     }
 
