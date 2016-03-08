@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v13.app.FragmentStatePagerAdapter;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -41,6 +42,7 @@ public class ArticleDetailActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActivityCompat.postponeEnterTransition(this);
         setContentView(R.layout.activity_article_detail);
         ButterKnife.bind(this);
         getLoaderManager().initLoader(0, null, this);
@@ -66,6 +68,7 @@ public class ArticleDetailActivity extends AppCompatActivity
             }
         });
 
+
         if (savedInstanceState == null) {
             if (getIntent() != null && getIntent().getData() != null) {
                 mStartId = ItemsContract.Items.getItemId(getIntent().getData());
@@ -83,7 +86,6 @@ public class ArticleDetailActivity extends AppCompatActivity
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         mCursor = cursor;
         mPagerAdapter.notifyDataSetChanged();
-        Log.e("LoadFinished", "Cursor id:  " + cursor.getLong(ArticleLoader.Query._ID) + " start ID:  " + mStartId);
         // Select the start ID
         if (mStartId > 0) {
             mCursor.moveToFirst();
@@ -98,6 +100,7 @@ public class ArticleDetailActivity extends AppCompatActivity
             }
             mStartId = 0;
         }
+
     }
 
     @Override
@@ -140,7 +143,6 @@ public class ArticleDetailActivity extends AppCompatActivity
 
     @Override
     public boolean onSupportNavigateUp() {
-        Log.v("ArticleDetailActivity", "Current pager item:  " + mPager.getCurrentItem());
         supportFinishAfterTransition();
         return true;
     }

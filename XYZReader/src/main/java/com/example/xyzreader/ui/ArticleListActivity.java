@@ -64,17 +64,6 @@ public class ArticleListActivity extends AppCompatActivity implements
         }
     }
 
-    private void loadArticleContainer() {
-        if (mTwoPane) {
-            long itemId = mRecyclerView.getAdapter().getItemId(0);
-            ArticleDetailFragment fragment = ArticleDetailFragment.newInstance(itemId, true);
-            getFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.article_container, fragment)
-                    .commit();
-        }
-    }
-
     @Override
     public void onClick(View view, long itemId) {
         if (mTwoPane) {
@@ -143,10 +132,11 @@ public class ArticleListActivity extends AppCompatActivity implements
         final ArticleAdapter articleAdapter = new ArticleAdapter(cursor, this, this);
         mRecyclerView.setAdapter(articleAdapter);
         int columnCount = getResources().getInteger(R.integer.list_column_count);
-//        StaggeredGridLayoutManager sglm =
-//                new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
-        GridLayoutManager lm = new GridLayoutManager(this, columnCount);
+        StaggeredGridLayoutManager lm =
+                new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
+        //GridLayoutManager lm = new GridLayoutManager(this, columnCount);
         mRecyclerView.setLayoutManager(lm);
+        mRecyclerView.performClick();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.example.xyzreader.ui;
 
+import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -51,6 +53,7 @@ public class ArticleDetailFragment extends Fragment implements
     private long mItemId;
     private boolean mIsTwoPane = false;
     private View mRootView;
+    private String transitionName = null;
     @Bind(R.id.photo) ImageView mPhotoView;
     @Bind(R.id.article_byline) TextView bylineView;
     @Bind(R.id.article_author) TextView authorView;
@@ -220,6 +223,8 @@ public class ArticleDetailFragment extends Fragment implements
         }
 
         bindViews();
+
+        ActivityCompat.startPostponedEnterTransition(getActivity());
     }
 
     @Override
