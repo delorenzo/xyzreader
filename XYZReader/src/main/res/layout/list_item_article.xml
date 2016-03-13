@@ -60,7 +60,7 @@
         <TextView
             android:layout_below="@+id/article_title"
             android:id="@+id/article_subtitle"
-            style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
+            style="@style/TextAppearance.AppCompat.Body1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
