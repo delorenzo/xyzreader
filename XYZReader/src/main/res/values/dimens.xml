@@ -15,7 +15,7 @@
     <dimen name="scrollbar_collapsed_height">56dp</dimen>
     <dimen name="scrollbar_detail_max_height">200dp</dimen>
 
-    <dimen name="list_item_size">200dp</dimen>
+    <dimen name="list_item_size">180dp</dimen>
 
     <!-- list -->
     <dimen name="list_side_margin">6dp</dimen>

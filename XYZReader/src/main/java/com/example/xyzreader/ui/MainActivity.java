@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements
     public static final String SELECTED_ITEM = "selectedItem";
     public static final String ARG_STARTING_POSITION = "startingPosition";
     public static final String ARG_CURRENT_POSITION = "currentPosition";
+    private int currentPosition;
     private Bundle activityReenterData;
     private SharedElementCallback sharedElementCallback;
 
@@ -86,17 +87,17 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onClick(View view, long itemId) {
         selectedItem = itemId;
+        ArticleAdapter.ViewHolder viewHolder =
+                (ArticleAdapter.ViewHolder) mRecyclerView.findViewHolderForItemId(itemId);
+        currentPosition = viewHolder != null ? viewHolder.getAdapterPosition() : 0;
         if (mTwoPane) {
             loadFragmentFromItemId(itemId);
         }
-
         else {
             Intent intent = new Intent(
                     Intent.ACTION_VIEW,
                     ItemsContract.Items.buildItemUri(itemId));
-            ArticleAdapter.ViewHolder viewHolder =
-                    (ArticleAdapter.ViewHolder) mRecyclerView.findViewHolderForItemId(itemId);
-            intent.putExtra(ARG_STARTING_POSITION, viewHolder.getAdapterPosition());
+            intent.putExtra(ARG_STARTING_POSITION, currentPosition);
             ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                     this,
                     viewHolder.thumbnailView,
@@ -167,21 +168,25 @@ public class MainActivity extends AppCompatActivity implements
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putLong(SELECTED_ITEM, selectedItem);
+        outState.putInt(ARG_CURRENT_POSITION, currentPosition);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
-            selectedItem = savedInstanceState.getLong(SELECTED_ITEM, selectedItem);
+            selectedItem = savedInstanceState.getLong(SELECTED_ITEM, 0);
+            currentPosition = savedInstanceState.getInt(ARG_CURRENT_POSITION, 0);
             if (selectedItem != -1) {
                 if (mTwoPane) {
                     loadFragmentFromItemId(selectedItem);
                 }
+                //skip the transition animation on a screen rotation
                 else {
                     Intent intent = new Intent(
                             Intent.ACTION_VIEW,
                             ItemsContract.Items.buildItemUri(selectedItem));
+                    intent.putExtra(ARG_STARTING_POSITION, currentPosition);
                     ActivityCompat.startActivity(this, intent, null);
                 }
             }
@@ -193,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements
         super.onActivityReenter(resultCode, data);
         activityReenterData = data.getExtras();
         int startingPosition = activityReenterData.getInt(ARG_STARTING_POSITION);
-        int currentPosition = activityReenterData.getInt(ARG_CURRENT_POSITION);
+        currentPosition = activityReenterData.getInt(ARG_CURRENT_POSITION);
         if (startingPosition != currentPosition) {
             mRecyclerView.scrollToPosition(currentPosition);
         }

@@ -37,6 +37,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         @Bind(R.id.thumbnail) ImageView thumbnailView;
         @Bind(R.id.article_title) TextView titleView;
         @Bind(R.id.article_subtitle) TextView subtitleView;
+        @Bind(R.id.list_item_view) View listItemView;
         private final View parent;
         public ViewHolder(View view) {
             super(view);
@@ -49,6 +50,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         public void SetSelected(Boolean isSelected) {
             titleView.setSelected(isSelected);
             subtitleView.setSelected(isSelected);
+            listItemView.setSelected(isSelected);
         }
     }
 
