@@ -8,6 +8,7 @@
     android:background="@drawable/touch_selector"
     android:focusable="true"
     android:descendantFocusability="blocksDescendants"
+    android:foreground="?selectableItemBackground"
     android:orientation="vertical">
 
     <ImageView
