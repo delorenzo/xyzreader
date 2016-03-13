@@ -7,5 +7,8 @@
         android:state_activated="true"
         android:drawable="@color/item_activated_color"/>
     <item
+        android:drawable="@color/theme_primary"
+        android:state_focused="true"></item>
+    <item
         android:drawable="@color/item_unselected_color"/>
 </selector>

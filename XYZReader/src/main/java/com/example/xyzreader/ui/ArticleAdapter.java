@@ -46,6 +46,10 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         public void setOnClickListener(View.OnClickListener listener) {
             parent.setOnClickListener(listener);
         }
+        public void SetSelected(Boolean isSelected) {
+            titleView.setSelected(isSelected);
+            subtitleView.setSelected(isSelected);
+        }
     }
 
     @Override

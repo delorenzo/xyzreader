@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/light_gray"
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
@@ -43,6 +44,7 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
         <android.support.v4.widget.SwipeRefreshLayout
+            android:elevation="2dp"
             android:id="@+id/swipe_refresh_layout"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -54,19 +56,18 @@
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
                 android:scrollbarStyle="outsideOverlay"
-                android:paddingTop="@dimen/abc_dialog_list_padding_vertical_material"
-                android:paddingBottom="@dimen/abc_dialog_list_padding_vertical_material"
                 />
         </android.support.v4.widget.SwipeRefreshLayout>
 
         <View
-            android:layout_width="2dp"
+            android:elevation="0dp"
+            android:layout_width="1dp"
             android:layout_height="match_parent"
             android:id="@+id/divider"
             android:background="@color/light_gray"/>
 
         <FrameLayout
-            android:elevation="2dp"
+            android:elevation="0dp"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:id="@+id/article_container"

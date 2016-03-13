@@ -26,4 +26,15 @@
     <style name="AppTheme.Main" parent="AppTheme"/>
 
     <style name="AppTheme.Detail" parent="AppTheme"/>
+
+    <style name="thumbnail_image">
+        <item name="android:paddingLeft">?android:attr/listPreferredItemPaddingLeft</item>
+        <item name="android:paddingRight">?android:attr/listPreferredItemPaddingRight</item>
+        <item name="android:layout_width">?android:attr/listPreferredItemHeightLarge</item>
+        <item name="android:layout_height">?android:attr/listPreferredItemHeightLarge</item>
+        <item name="android:minHeight">?android:attr/listPreferredItemHeightLarge</item>
+        <item name="android:minWidth">?android:attr/listPreferredItemHeightLarge</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:gravity">center</item>
+    </style>
 </resources>

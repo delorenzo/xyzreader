@@ -1,6 +1,7 @@
 package com.example.xyzreader.ui;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.LoaderManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -51,6 +52,9 @@ public class ArticleListActivity extends AppCompatActivity implements
     @Bind(R.id.recycler_view) RecyclerView mRecyclerView;
     @Bind(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
     private Boolean mTwoPane = false;
+    private long selectedItem = -1;
+    public static final String ARTICLE_FRAGMENT_TAG = "articleFragmentTag";
+    public static final String SELECTED_ITEM = "selectedItem";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,12 +70,9 @@ public class ArticleListActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(View view, long itemId) {
+        selectedItem = itemId;
         if (mTwoPane) {
-            ArticleDetailFragment fragment = ArticleDetailFragment.newInstance(itemId, true);
-            getFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.article_container, fragment)
-                    .commit();
+            loadFragmentFromItemId(itemId);
         }
 
         else {
@@ -89,6 +90,22 @@ public class ArticleListActivity extends AppCompatActivity implements
         }
     }
 
+    private void loadFragmentFromItemId(long itemId) {
+        ArticleDetailFragment fragment = ArticleDetailFragment.newInstance(itemId, true);
+        FragmentManager fragmentManager = getFragmentManager();
+        if (getFragmentManager().findFragmentByTag(ARTICLE_FRAGMENT_TAG) != null) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.article_container, fragment, ARTICLE_FRAGMENT_TAG)
+                    .commit();
+        }
+        else {
+            fragmentManager
+                    .beginTransaction()
+                    .add(R.id.article_container, fragment, ARTICLE_FRAGMENT_TAG)
+                    .commit();
+        }
+    }
+
     private void refresh() {
         startService(new Intent(this, UpdaterService.class));
     }
@@ -98,6 +115,9 @@ public class ArticleListActivity extends AppCompatActivity implements
         super.onStart();
         registerReceiver(mRefreshingReceiver,
                 new IntentFilter(UpdaterService.BROADCAST_ACTION_STATE_CHANGE));
+        if (mTwoPane && mRecyclerView.getAdapter() != null) {
+            onClick(mRecyclerView, mRecyclerView.getAdapter().getItemId(0));
+        }
     }
 
     @Override
@@ -128,15 +148,50 @@ public class ArticleListActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong(SELECTED_ITEM, selectedItem);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            selectedItem = savedInstanceState.getLong(SELECTED_ITEM, selectedItem);
+            if (selectedItem != -1) {
+                if (mTwoPane) {
+                    loadFragmentFromItemId(selectedItem);
+                }
+                else {
+                    Intent intent = new Intent(
+                            Intent.ACTION_VIEW,
+                            ItemsContract.Items.buildItemUri(selectedItem));
+                    ActivityCompat.startActivity(this, intent, null);
+                }
+            }
+        }
+    }
+
+    @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         final ArticleAdapter articleAdapter = new ArticleAdapter(cursor, this, this);
         mRecyclerView.setAdapter(articleAdapter);
         int columnCount = getResources().getInteger(R.integer.list_column_count);
-        StaggeredGridLayoutManager lm =
-                new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
-        //GridLayoutManager lm = new GridLayoutManager(this, columnCount);
+        //StaggeredGridLayoutManager lm =
+        //        new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
+        GridLayoutManager lm = new GridLayoutManager(this, columnCount);
         mRecyclerView.setLayoutManager(lm);
-        mRecyclerView.performClick();
+        //load the first item in the list, in two pane mode
+        if (mTwoPane) {
+            mRecyclerView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    onClick(mRecyclerView, mRecyclerView.getAdapter().getItemId(0));
+                }
+            }, 200);
+        }
+        mIsRefreshing = false;
+        updateRefreshingUI();
     }
 
     @Override

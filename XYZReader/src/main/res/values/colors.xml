@@ -37,10 +37,11 @@
     <color name="text_color_disabled_dark">#59000000</color>
     <color name="text_color_dividers_dark">#1A000000</color>
 
-    <color name="item_selected_color">@color/theme_accent</color>
+    <color name="item_selected_color">@color/light_gray</color>
     <color name="item_activated_color">@color/theme_accent_light</color>
-    <color name="item_unselected_color">@color/photo_placeholder</color>
+    <color name="item_unselected_color">@color/white</color>
 
     <color name="transparent">#0000</color>
-    <color name="light_gray">#3000</color>
+    <color name="light_gray">#99000000</color>
+    <color name="white">#FFFFFF</color>
 </resources>
