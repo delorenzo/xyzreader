@@ -1,6 +1,5 @@
 package com.example.xyzreader.ui;
 
-import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.Intent;
@@ -41,7 +40,7 @@ import butterknife.OnClick;
 
 /**
  * A fragment representing a single Article detail screen. This fragment is
- * either contained in a {@link ArticleListActivity} in two-pane mode (on
+ * either contained in a {@link MainActivity} in two-pane mode (on
  * tablets) or a {@link ArticleDetailActivity} on handsets.
  */
 public class ArticleDetailFragment extends Fragment implements
@@ -53,7 +52,6 @@ public class ArticleDetailFragment extends Fragment implements
     private long mItemId;
     private boolean mIsTwoPane = false;
     private View mRootView;
-    private String transitionName = null;
     @Bind(R.id.photo) ImageView mPhotoView;
     @Bind(R.id.article_byline) TextView bylineView;
     @Bind(R.id.article_author) TextView authorView;

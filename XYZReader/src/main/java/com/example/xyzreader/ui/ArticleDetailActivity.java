@@ -1,27 +1,29 @@
 package com.example.xyzreader.ui;
 
+import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.LoaderManager;
+import android.app.SharedElementCallback;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
-import com.example.xyzreader.data.ItemsContract;
+
+import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -32,12 +34,13 @@ import butterknife.ButterKnife;
 public class ArticleDetailActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
     private Cursor mCursor;
-    private long mStartId;
-    private long mSelectedItemId;
     @Bind(R.id.pager) ViewPager mPager;
     private MyPagerAdapter mPagerAdapter;
-    private int mSelectedItemUpButtonFloor = Integer.MAX_VALUE;
-    private int mTopInset;
+    ArticleDetailFragment fragment;
+    private int currentPosition;
+    private int startingPosition;
+    private static final String CURRENT_POSITION = "currentPosition";
+    private SharedElementCallback sharedElementCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,32 +51,22 @@ public class ArticleDetailActivity extends AppCompatActivity
         getLoaderManager().initLoader(0, null, this);
         mPagerAdapter = new MyPagerAdapter(getFragmentManager());
         mPager.setAdapter(mPagerAdapter);
-        mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
+        startingPosition = getIntent().getIntExtra(MainActivity.ARG_STARTING_POSITION, 0);
+        currentPosition = savedInstanceState == null ? startingPosition : savedInstanceState.getInt(CURRENT_POSITION);
+        mPager.setCurrentItem(currentPosition);
+        mPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 if (mCursor != null) {
+                    currentPosition = position;
                     mCursor.moveToPosition(position);
-                    mSelectedItemId = mCursor.getLong(ArticleLoader.Query._ID);
                 }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
             }
         });
 
-
-        if (savedInstanceState == null) {
-            if (getIntent() != null && getIntent().getData() != null) {
-                mStartId = ItemsContract.Items.getItemId(getIntent().getData());
-                mSelectedItemId = mStartId;
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            SetupSharedElementCallback();
+            setEnterSharedElementCallback(sharedElementCallback);
         }
     }
 
@@ -86,21 +79,8 @@ public class ArticleDetailActivity extends AppCompatActivity
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         mCursor = cursor;
         mPagerAdapter.notifyDataSetChanged();
-        // Select the start ID
-        if (mStartId > 0) {
-            mCursor.moveToFirst();
-            while (!mCursor.isAfterLast()) {
-                if (mCursor.getLong(ArticleLoader.Query._ID) == mStartId) {
-                    final int position = mCursor.getPosition();
-                    mPager.setCurrentItem(position, false);
-                    Log.e("TAG", "Position:  " + position);
-                    break;
-                }
-                mCursor.moveToNext();
-            }
-            mStartId = 0;
-        }
-
+        mCursor.moveToPosition(currentPosition);
+        mPager.setCurrentItem(currentPosition, false);
     }
 
     @Override
@@ -117,7 +97,7 @@ public class ArticleDetailActivity extends AppCompatActivity
         @Override
         public void setPrimaryItem(ViewGroup container, int position, Object object) {
             super.setPrimaryItem(container, position, object);
-            ArticleDetailFragment fragment = (ArticleDetailFragment) object;
+            fragment = (ArticleDetailFragment) object;
         }
 
         @Override
@@ -145,5 +125,42 @@ public class ArticleDetailActivity extends AppCompatActivity
     public boolean onSupportNavigateUp() {
         supportFinishAfterTransition();
         return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(CURRENT_POSITION, currentPosition);
+    }
+
+    @Override
+    public void supportFinishAfterTransition() {
+        Intent data = new Intent();
+        data.putExtra(MainActivity.ARG_CURRENT_POSITION, currentPosition);
+        data.putExtra(MainActivity.ARG_STARTING_POSITION, startingPosition);
+        setResult(RESULT_OK, data);
+        super.supportFinishAfterTransition();
+    }
+
+    //specify shared elements explicitly here to resolve issue with returning from this activity
+    //with the incorrect thumbnail as an image.
+    //see http://stackoverflow.com/questions/27304834/viewpager-fragments-shared-element-transitions
+    @TargetApi(21)
+    private void SetupSharedElementCallback() {
+        sharedElementCallback = new SharedElementCallback() {
+            @Override
+            public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+                ImageView sharedElement = fragment.mPhotoView;
+                if (sharedElement == null) {
+                    names.clear();
+                    sharedElements.clear();
+                } else {
+                    names.clear();
+                    names.add(sharedElement.getTransitionName());
+                    sharedElements.clear();
+                    sharedElements.put(sharedElement.getTransitionName(), sharedElement);
+                }
+            }
+        };
     }
 }

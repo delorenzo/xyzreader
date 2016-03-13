@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="list_item_card_margin">6dp</dimen>
+    <dimen name="list_side_margin">6dp</dimen>
+    <dimen name="list_item_size">200dp</dimen>
 </resources>

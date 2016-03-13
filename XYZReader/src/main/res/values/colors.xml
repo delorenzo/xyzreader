@@ -42,6 +42,7 @@
     <color name="item_unselected_color">@color/white</color>
 
     <color name="transparent">#0000</color>
-    <color name="light_gray">#99000000</color>
+    <color name="light_gray">#88000000</color>
     <color name="white">#FFFFFF</color>
+    <color name="dark_gray">#DD000000</color>
 </resources>
